@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>張媽媽營業稅計算機</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', 'Microsoft JhengHei', Arial, sans-serif;
+      background: linear-gradient(to right, #a1c4fd, #c2e9fb);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .calculator {
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 40px 50px;
+      border-radius: 20px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+      text-align: center;
+      width: 450px;
+    }
+
+    h1 {
+      font-size: 30px;
+      margin-bottom: 25px;
+      color: #34495e;
+    }
+
+    select, input[type="number"] {
+      width: 85%;
+      padding: 12px;
+      font-size: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      text-align: center;
+      text-align-last: center;
+    }
+
+    button {
+      width: 100%;
+      padding: 16px;
+      font-size: 24px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background-color: #45a049;
+      transform: scale(1.03);
+    }
+
+    #result {
+      margin-top: 30px;
+      font-size: 32px;
+      font-weight: bold;
+      color: #2c3e50;
+      padding: 25px;
+      background-color: #fdf6e3;
+      border-radius: 15px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      white-space: pre-line;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <h1>張媽媽營業稅計算機</h1>
+    
+    <!-- 單選單模式 -->
+    <select id="mode">
+      <option value="total">輸入含稅價 → 反推未稅價</option>
+      <option value="untaxed">輸入未稅價 → 計算含稅價</option>
+    </select>
+
+    <input type="number" id="amount" placeholder="請輸入金額">
+    <button onclick="calculateTax()">計算</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function calculateTax() {
+      const amount = parseFloat(document.getElementById('amount').value);
+      const mode = document.getElementById('mode').value;
+      const taxRate = 0.05;
+
+      if (isNaN(amount) || amount <= 0) {
+        document.getElementById('result').innerText = "請輸入有效數字！";
+        return;
+      }
+
+      let resultText = "";
+
+      if (mode === "total") {
+        // 反推未稅價
+        const untaxed = amount / (1 + taxRate);
+        const tax = amount - untaxed;
+        resultText = 
+          `未稅價: ${untaxed.toFixed(2)} 元\n` +
+          `稅額: ${tax.toFixed(2)} 元\n` +
+          `含稅價: ${amount.toFixed(2)} 元`;
+      } else if (mode === "untaxed") {
+        // 計算含稅價
+        const tax = amount * taxRate;
+        const total = amount + tax;
+        resultText = 
+          `未稅價: ${amount.toFixed(2)} 元\n` +
+          `稅額: ${tax.toFixed(2)} 元\n` +
+          `含稅價: ${total.toFixed(2)} 元`;
+      }
+
+      document.getElementById('result').innerText = resultText;
+    }
+  </script>
+</body>
+</html>
